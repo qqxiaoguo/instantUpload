@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+		<title>BuyMore - eCommerce Bootstrap Template</title>
+
+		<!--======== All Stylesheet =========-->
+		<link href="../bootstrap/css/bootstrap.min.css"   type="text/css"rel="stylesheet">
+
+
+        <link href="../css/font-awesome.min.css"  type="text/css" rel="stylesheet">
+		<link href="../css/linearicons.css"   type="text/css" rel="stylesheet">
+		<link href="../css/style.css"  type="text/css" rel="stylesheet">
+		<link href="../css/responsive.css"  type="text/css"  rel="stylesheet">
+        <link href="../guo/css/LUploader.css" type="text/css" rel="stylesheet">
+
+
+        <script src="../plugins/angularjs/angular.min.js"></script>
+        <script src="../js/base.js"></script>
+        <script src="../js/service/userService.js"></script>
+        <script src="../js/controller/userController.js"></script>
+        <script src="../js/jquery-2.1.1.js"></script>
+
+
+
+        <script src="../guo/js/LUploader.js" type="text/javascript"></script>
+
+
+
+	<!--	<script src="../staticjs/socket.js"></script>-->
+
+        <script src="../bootstrap/js/bootstrap.js"></script>
+
+		<script type="text/javascript" 	src="../js/jquery.base64.js"></script>
+		<script type="text/javascript">
+
+		</script>
+	</head>
+
+	<body ng-app="lpjj" ng-controller="userController">
+		<!-- Header -->
+		<header class="header">
+			<div class="middle-header">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-2 col-xs-6">
+							<div>
+								<a class="site-title" href="index.html"> <img src="../images/logo.png"></a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			</div>
+		</header>
+		<!-- Fashion box -->
+		<!--<section class="fashion-box">-->
+		<div class="container">
+		  <div class="form-horizontal col-md-offset-3">
+               <h4>第一步创建图像库</h4>
+               <br>
+               <div class="form-group">
+                   <label  class="col-sm-1 control-label">库名</label>    <input    id="jin"  class="form-control" style="width: 350px" type="text"  placeholder="请输入库名"/>
+              </div>
+              <div class="form-group">
+                 &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; <button type="submit" id="jin1" class="btn btn-success"  onclick="sub()">创建</button>
+
+              </div>
+
+         </div>
+
+		</div>
+
+                <div class="container">
+            <div class="form-horizontal col-md-offset-3">
+                <h4>第二步底库图片上传</h4>
+
+                <!--action="/upload/picture"-->
+                        <form    enctype="multipart/form-data"   id="formid" >
+                            <div class="form-group">
+                                <label  class="col-sm-1 control-label">姓名</label>
+                                <input   class="form-control" style="width: 350px"  type="text"  ng-model="name1"/>
+                            </div>
+
+
+                            <div class="form-group" >
+                                <input   ng-model="repository_id"  id="ren"  value="1111"   type="text"  hidden  />
+
+                            <div class="LUploader" id="demo1"  style="width: 350px;height: 400px">
+                                <div class="LUploader-container">
+                                    <label  class="col-sm-1 control-label" >人脸头像</label>
+                                    <input   ng-model="file" data-LUploader='demo1' type="file" data-form-file='basestr' data-upload-type='front'  />
+                                     <ul class="LUploader-list"></ul>
+                                </div>
+                                <div>
+                                             <div class="icon icon-camera font20"></div>
+                                    <p>单击上传</p>
+                                </div>
+                             </div>
+                            </div>
+
+                            <input  type="submit" ng-click="save();"  class="btn btn-success"  value="提交" />
+                        </form>
+
+                      </div>
+
+                </div>
+		<!--======== All Javascript =========-->
+		<!--<script src="../static/js/bootstrap.min.js"></script>-->
+	</body>
+<script>
+      var cid;
+     function sub() {
+         var dataname=$('.form-control').val();
+         var id;
+         $.ajax({
+             type : 'POST' ,
+             contentType:"application/json;charset=utf-8",
+             url : "/upload/facedb",
+             data :JSON.stringify({"name":dataname}),
+             dataType: 'json',
+             success : function(data)
+             {
+                 console.log(data);
+                 id= data.id;
+                   cid ="202";
+                 $("#ren").attr("value",cid);
+                 console.log(cid);
+                 if(id!=null||!id.equals(""))
+                 {
+                     alert("创建成功请上传人脸图片！");
+                    $("#jin").attr('disabled', 'disabled');
+                    $("#jin1").attr('disabled', 'disabled');
+
+                 }
+                 else
+                 {
+                     //$(".form-control").attr('disabled', 'disabled');
+                 }
+             }
+         })
+
+     }
+
+    function check(){
+        $("#ren").attr("value",200);
+        cid=200;
+        if(cid == null || cid == ''){
+            alert(cid);
+            alert("库不存在");
+            return false;
+          }else {
+            var dataname=$('.form-control').val();
+        }
+            $.ajax({
+                type: "post",
+                url: "/recws/user/userLogout",
+                data: {},
+                async : false,
+                success: function (data) {//data为返回json数据
+                    if(data.result == "success"){
+                        window.location.replace("/");
+                    }else{
+                    }
+                }
+            });
+            return false;
+    }
+
+
+    //回显图片
+    new LUploader(document.querySelector('input[data-LUploader]'), {
+             url: '/upload/picture',//post请求地址
+             multiple: false,//是否一次上传多个文件 默认false
+             maxsize: 102400,//忽略压缩操作的文件体积上限 默认100kb
+             accept: 'image/*',//可上传的图片类型
+             quality: 0.1,//压缩比 默认0.1  范围0.1-1.0 越小压缩率越大
+             showsize:true//是否显示原始文件大小 默认false
+         });
+
+
+
+
+</script>
+</html>
